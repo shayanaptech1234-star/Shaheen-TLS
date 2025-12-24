@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | Shaheen TLS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00bfff;
+            --primary-dark: #0099cc;
+            --accent: #ffae00;
+            --bg: #f8f9fa;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow-hover: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-dark); line-height: 1.6; padding-top: 80px; }
+
+        /* --- Glassy Header --- */
+        header { 
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 80px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-container { display: flex; align-items: center; height: 100%; z-index: 2; }
+        .logo-img { max-height: 55px; width: auto; object-fit: contain; }
+
+        .glass-nav {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px;
+            background: rgba(255,255,255,0.5);
+            padding: 5px; border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .nav-link {
+            text-decoration: none; color: var(--text-dark); font-weight: 600;
+            padding: 8px 24px; border-radius: 30px; transition: all 0.3s ease; font-size: 0.95rem;
+        }
+        .nav-link:hover { color: var(--primary-dark); background: rgba(255,255,255,0.8); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(0, 191, 255, 0.3); }
+
+        .header-cart-btn {
+            position: relative; cursor: pointer; width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: flex-end;
+            transition: transform 0.2s; color: var(--text-dark); font-size: 1.2rem; z-index: 2;
+        }
+        .header-cart-btn:hover { color: var(--primary); }
+
+        .badge {
+            position: absolute; top: -5px; right: -5px;
+            background: var(--accent); color: var(--text-dark);
+            font-size: 0.7rem; font-weight: 800;
+            height: 18px; width: 18px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; border: 2px solid white;
+            opacity: 0; transition: opacity 0.2s;
+        }
+        .badge.active { opacity: 1; }
+
+        /* Layout */
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem 5%; min-height: 80vh; }
+        .section-header { margin-bottom: 1.5rem; text-align: center; margin-top: 2rem; }
+        .section-header h1 { font-size: 2.5rem; font-weight: 800; color: var(--text-dark); letter-spacing: -1px; }
+        .section-header p { color: var(--text-gray); margin-top: 10px; font-size: 1.1rem;}
+
+        /* --- Filter Controls --- */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px rgba(0, 191, 255, 0.2);
+        }
+
+        /* Product Grid */
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+        }
+
+        .product-card {
+            background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+            overflow: hidden; display: flex; flex-direction: column;
+            transition: all 0.3s ease; position: relative; cursor: pointer;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
+
+        .image-placeholder {
+            width: 100%; height: 220px;
+            background: #f1f5f9;
+            display: flex; align-items: center; justify-content: center;
+            color: #cbd5e1; font-size: 3rem; border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .image-placeholder img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .product-card:hover .image-placeholder img { transform: scale(1.05); }
+
+        .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
+        
+        .product-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; color: var(--text-dark); }
+        .product-price { font-size: 1.1rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px; }
+        .product-desc { font-size: 0.95rem; color: var(--text-gray); margin-bottom: 20px; flex-grow: 1; }
+
+        .btn-view {
+            background: transparent; color: var(--primary-dark);
+            border: 2px solid var(--border);
+            padding: 10px; width: 100%; font-weight: 600; cursor: pointer;
+            border-radius: 8px; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .product-card:hover .btn-view { border-color: var(--primary-dark); background: var(--primary-dark); color: white; }
+
+        /* General Button Style */
+        .btn-primary {
+            background: var(--primary-dark); color: white; border: none;
+            padding: 12px; width: 100%; font-weight: 600; cursor: pointer;
+            border-radius: 8px; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-size: 1rem;
+        }
+        .btn-primary:hover { background: #0077a3; }
+
+        /* Floating Cart */
+        .fab-cart {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--primary-dark); color: white;
+            width: 60px; height: 60px; border-radius: 50%;
+            box-shadow: 0 10px 25px rgba(0,0,0, 0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; cursor: pointer; z-index: 900;
+            transition: transform 0.2s;
+        }
+        .fab-cart:hover { transform: scale(1.1); }
+        .fab-count {
+            position: absolute; top: 0; right: 0;
+            background: var(--accent); color: var(--text-dark);
+            font-size: 0.8rem; font-weight: bold;
+            height: 22px; width: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid white;
+        }
+
+        /* Modal Generic Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1100; opacity: 0; transition: opacity 0.3s;
+        }
+        .modal-overlay.open { display: flex; opacity: 1; }
+
+        .modal {
+            background: var(--white); padding: 2rem;
+            width: 90%; max-width: 500px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px); transition: transform 0.3s;
+            position: relative;
+        }
+        .modal-overlay.open .modal { transform: translateY(0); }
+        .btn-close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; }
+
+        /* Cart Modal Specifics */
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .cart-items-container { max-height: 300px; overflow-y: auto; margin-bottom: 1.5rem; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+        .cart-item-info { display:flex; flex-direction:column; }
+        .cart-item-price { font-size: 0.85rem; color: var(--text-gray); }
+        
+        .cart-controls { display: flex; align-items: center; gap: 8px; }
+        .qty-btn { 
+            width: 24px; height: 24px; 
+            border-radius: 4px; border: 1px solid var(--border);
+            background: white; color: var(--text-dark);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; transition: all 0.2s;
+        }
+        .qty-btn:hover { background: var(--bg); border-color: var(--primary); }
+        .cart-qty { font-weight: bold; width: 25px; text-align: center; }
+        .btn-remove { color: #ef4444; background: none; border: none; cursor: pointer; margin-left: 5px;}
+
+        .cart-total-section { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 800; border-top: 2px solid var(--border); padding-top: 15px; margin-bottom: 20px; color: var(--text-dark); }
+        
+        .modal-btns { display: grid; grid-template-columns: 1fr 2fr; gap: 12px; }
+        .btn-cancel { background: white; border: 1px solid var(--border); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600;}
+
+        /* Product Detail Modal Specifics */
+        .product-detail-modal { max-width: 700px; }
+        .product-detail-layout { display: flex; gap: 2rem; }
+        .detail-image-container { flex: 1; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 250px; font-size: 4rem; color: #cbd5e1; overflow: hidden; }
+        .detail-image-container img { width: 100%; height: 100%; object-fit: cover; }
+        .detail-info { flex: 1.2; display: flex; flex-direction: column; }
+        .detail-title { font-size: 1.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 5px; color: var(--text-dark); }
+        .detail-price { font-size: 1.5rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 1rem; }
+        .detail-desc { color: var(--text-gray); margin-bottom: 2rem; line-height: 1.7; flex-grow: 1; }
+        
+        /* Footer */
+        footer { background: var(--text-dark); color: white; padding: 4rem 5% 2rem; margin-top: 4rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1400px; margin: 0 auto; }
+        .footer-col h3 { color: var(--primary); margin-bottom: 1.2rem; font-size: 1.2rem; }
+        .footer-col p { color: #cbd5e1; margin-bottom: 0.8rem; font-size: 0.95rem; }
+        .footer-col i { width: 25px; color: var(--primary); }
+        .copyright { text-align: center; border-top: 1px solid #334155; margin-top: 3rem; padding-top: 2rem; color: #94a3b8; font-size: 0.9rem; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 100px; right: 30px;
+            background: #10b981; color: white; padding: 12px 24px; border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 1200;
+            display: flex; align-items: center; gap: 10px; font-weight: 500;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        /* Mobile Responsive */
+      /* Mobile Responsive Improvements */
+@media (max-width: 768px) {
+    header { padding: 0 3%; justify-content: space-between; }
+    .logo-img { max-height: 40px; }
+    .glass-nav { position: relative; left: auto; transform: none; gap: 5px; background: none; border: none; }
+    .nav-link { padding: 6px 12px; font-size: 0.85rem; }
+    
+    /* FIX: Adjusted grid and image height for a rectangular look */
+    .product-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; 
+    }
+
+    .image-placeholder {
+        height: 140px; /* Reduced height to keep it rectangular */
+    }
+
+    .product-title {
+        font-size: 0.95rem; /* Smaller text to fit better */
+        line-height: 1.2;
+    }
+
+    .card-content {
+        padding: 1rem;
+    }
+
+    .product-desc {
+        display: none; /* Hiding short desc on mobile keeps cards uniform and rectangular */
+    }
+
+    .section-header h1 { font-size: 1.8rem; }
+    
+    .product-detail-layout { flex-direction: column; gap: 1rem; }
+    .detail-image-container { min-height: 200px; }
+}
+.image-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Changed from cover to contain if you want to see the whole product */
+    background: #f1f5f9;
+}
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo-container">
+        <img src="WhatsApp Image 2025-12-23 at 11.14.36 PM.jpeg" alt="Shaheen TLS" class="logo-img">
+    </a>
+
+    <nav class="glass-nav">
+        <a href="index.html" class="nav-link ">Home</a>
+       
+    </nav>
+
+    <div class="header-cart-btn" onclick="openCart()">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <div class="badge" id="headerBadge">0</div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="section-header">
+        <h1>Our Products</h1>
+        <p>Professional tiling and leveling solutions.</p>
+    </div>
+
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterProducts('all')">All Products</button>
+        <button class="filter-btn" onclick="filterProducts('leveling')">Leveling System</button>
+        <button class="filter-btn" onclick="filterProducts('fixing')">Mechanical Fixing</button>
+        <button class="filter-btn" onclick="filterProducts('tools')">Tools & Accessories</button>
+    </div>
+
+    <div class="product-grid" id="grid"></div>
+</div>
+
+<footer id="contact">
+    <div class="footer-content">
+        <div class="footer-col">
+            <h3>Shaheen TLS</h3>
+            <p>Providing high-quality tile leveling systems and construction tools for professionals.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Contact Us</h3>
+            <p><i class="fa-solid fa-envelope"></i> sales@shaheentls.com</p>
+            <p><i class="fa-solid fa-phone"></i> +92 336 939426</p>
+            <p><i class="fa-solid fa-location-dot"></i> 12375 Banmer Won, Karachi</p>
+        </div>
+        <div class="footer-col">
+            <h3>Quick Links</h3>
+            <p><a href="#" style="color:#cbd5e1; text-decoration:none;">Product Catalog</a></p>
+            <p><a href="#" style="color:#cbd5e1; text-decoration:none;">Support</a></p>
+        </div>
+    </div>
+    <div class="copyright">
+        &copy; 2025 Shaheen TLS. All rights reserved.
+    </div>
+</footer>
+
+<div class="fab-cart" onclick="openCart()">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <div class="fab-count" id="fabCount">0</div>
+</div>
+
+<div class="modal-overlay" id="cartModalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Your Order</h2>
+            <button class="header-cart-btn" onclick="closeCart()" style="border:none; width:auto; height:auto;">&times;</button>
+        </div>
+        
+        <div class="cart-items-container" id="cartList"></div>
+        
+        <div class="cart-total-section" id="cartTotalSection" style="display:none;">
+            <span>Total:</span>
+            <span id="cartTotalValue">AED 0.00</span>
+        </div>
+
+        <div class="modal-btns">
+            <button class="btn-cancel" onclick="closeCart()">Close</button>
+            <button class="btn-primary" onclick="checkout()">Place Order via Gmail</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="productModalOverlay">
+    <div class="modal product-detail-modal">
+        <button class="btn-close-modal" onclick="closeProductDetail()">&times;</button>
+        
+        <div class="product-detail-layout">
+            <div class="detail-image-container" id="detailImage">
+                </div>
+            <div class="detail-info">
+                <h2 class="detail-title" id="detailTitle">Product Name</h2>
+                <div class="detail-price" id="detailPrice">AED 0.00</div>
+                <p class="detail-desc" id="detailDesc">
+                    Full product description goes here.
+                </p>
+                <button class="btn-primary" id="detailAddBtn">
+                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">
+    <i class="fa-solid fa-check-circle"></i> Added to cart!
+</div>
+
+<script>
+    // --- CONFIGURATION ---
+    const TARGET_EMAIL = "sales@shaheentls.com"; 
+
+    // --- PRODUCT DATA (With Categories, Prices, and Sample Images) ---
+    // Images are sourced from Unsplash for demonstration purposes
+    const products = [
+        { id: 1, category: "fixing", name: "Safety Hook - Small", price: 25.00, desc: "0.6m standad facades.", longDesc: "High quality Stainless Steel 304 safety hook. Designed for facade mechanical fixing with 0.6mm thickness.", imgSrc: "" },
+        { id: 2, category: "fixing", name: "SS 304 Safety Hook - Large", price: 35.00, desc: "1.0mm heavy duty mechanical fixing.", longDesc: "Heavy duty SS 304 hook with 1.0mm thickness. Ideal for larger stone or tile mechanical fixing.", imgSrc: "" },
+        { id: 3, category: "leveling", name: "Leveling Clip 1.0mm", price: 40.00, desc: "Transparent white clips (Pack of 100).", longDesc: "Create ultra-fine grout lines with our 1.0mm leveling clips. Made from high-quality transparent plastic.", imgSrc: "" },
+        { id: 4, category: "leveling", name: "Leveling Clip 1.5mm", price: 42.00, desc: "Professional grade floor clips (Pack of 100).", longDesc: "The industry standard for floor tiling. 1.5mm spacing clips provide the perfect balance.", imgSrc: "" },
+        { id: 5, category: "leveling", name: "Leveling Clip 2.0mm", price: 42.00, desc: "Standard spacing for wall tiles (Pack of 100).", longDesc: "2.0mm clips are excellent for wall tiling projects, providing strong support.", imgSrc: "" },
+        { id: 6, category: "leveling", name: "Leveling Clip 3.0mm", price: 45.00, desc: "Wide joint leveling solution (Pack of 100).", longDesc: "Designed for rustic tiles or outdoor paving where a wider, 3.0mm grout joint is preferred.", imgSrc: "" },
+        { id: 7, category: "leveling", name: "Reusable Wedges", price: 55.00, desc: "Hardened plastic, pack of 100.", longDesc: "Durable, reusable wedges compatible with all our clip sizes. Serrated design for tight hold.", imgSrc: "" },
+        { id: 8, category: "leveling", name: "Adjustable Pliers", price: 85.00, desc: "Metal ergonomics for high tension.", longDesc: "Ergonomic metal pliers designed to push wedges into clips with minimal effort.", imgSrc: "" },
+        { id: 9, category: "leveling", name: "Cross Spacers 2mm", price: 15.00, desc: "Precision tile alignment stars (Pack of 200).", longDesc: "Traditional cross spacers for standard alignment. 2mm thickness.", imgSrc: "" },
+        { id: 10, category: "fixing", name: "Wall Anchor Bolt", price: 5.00, desc: "Secure fixing for mechanical hooks.", longDesc: "Expansion anchor bolts for securing mechanical safety hooks into concrete.", imgSrc: "" },
+        { id: 11, category: "tools", name: "Suction Cup Pro", price: 120.00, desc: "Single head tile lifter.", longDesc: "Heavy duty single-head suction cup for lifting and positioning smooth surface tiles.", imgSrc: "" },
+        { id: 12, category: "tools", name: "Rubber Grout Float", price: 45.00, desc: "Ergonomic handle for smooth finish.", longDesc: "Soft rubber face ensures grout is pushed deep into joints without scratching.", imgSrc: "" },
+        { id: 13, category: "tools", name: "Notched Trowel", price: 60.00, desc: "10mm steel notched trowel.", longDesc: "Professional steel trowel with 10mm notches. Essential for applying adhesive.", imgSrc: "" },
+        { id: 14, category: "tools", name: "Angle Grinder Blade", price: 95.00, desc: "Diamond rim for ceramic cutting.", longDesc: "Continuous rim diamond blade for smooth, chip-free cutting of ceramic.", imgSrc: "" },
+        { id: 15, category: "leveling", name: "Tile Leveling Kit", price: 250.00, desc: "Full starter pack with 500 clips.", longDesc: "The complete starter kit: Includes 500 clips, 200 wedges, and 1 pair of pliers.", imgSrc: "" },
+        { id: 16, category: "tools", name: "Laser Level Pro", price: 450.00, desc: "360 degree green beam level.", longDesc: "Self-leveling 360-degree green laser line. High visibility for indoor layout work.", imgSrc: "" },
+        { id: 17, category: "leveling", name: "Spacers 5mm", price: 20.00, desc: "Large format paving spacers (Pack of 100).", longDesc: "Large 5mm spacers designed specifically for outdoor pavers and thick slabs.", imgSrc: "" },
+        { id: 18, category: "tools", name: "Knee Pads Pro", price: 75.00, desc: "Gel padded comfort for installers.", longDesc: "Protect your knees during long installation days. Hard shell outer with soft gel.", imgSrc: "" },
+        { id: 19, category: "tools", name: "Tile File", price: 35.00, desc: "Tungsten carbide smoothing tool.", longDesc: "Hand tool for smoothing rough edges of cut tiles. Tungsten carbide grit.", imgSrc: "" },
+        { id: 20, category: "tools", name: "Bucket Mixer", price: 50.00, desc: "Heavy duty adhesive mixing paddle.", longDesc: "Attach to your drill to mix thin-set mortar and grout effortlessly. Spiral design ensures a lump-free mix.", imgSrc: "" }
+    ];
+
+    let cart = [];
+
+    // --- DOM REFERENCES ---
+    const grid = document.getElementById('grid');
+    const headerBadge = document.getElementById('headerBadge');
+    const fabCount = document.getElementById('fabCount');
+    const cartModalOverlay = document.getElementById('cartModalOverlay');
+    const productModalOverlay = document.getElementById('productModalOverlay');
+    const cartList = document.getElementById('cartList');
+    const cartTotalSection = document.getElementById('cartTotalSection');
+    const cartTotalValue = document.getElementById('cartTotalValue');
+    const toast = document.getElementById('toast');
+
+    // --- INITIALIZE GRID ---
+    renderProducts('all');
+
+    function renderProducts(category) {
+        grid.innerHTML = ''; // Clear existing
+        
+        // Update filter button styles
+        const btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(btn => {
+            if(category === 'all' && btn.textContent.includes('All')) {
+                btn.classList.add('active');
+            } else if (category === 'leveling' && btn.textContent.includes('Leveling')) {
+                btn.classList.add('active');
+            } else if (category === 'fixing' && btn.textContent.includes('Mechanical')) {
+                btn.classList.add('active');
+            } else if (category === 'tools' && btn.textContent.includes('Tools')) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Filter Data
+        const filteredProducts = category === 'all' 
+            ? products 
+            : products.filter(p => p.category === category);
+
+        // Render
+        filteredProducts.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.onclick = () => openProductDetail(p.id);
+
+            const imageContent = p.imgSrc 
+                ? `<img src="${p.imgSrc}" alt="${p.name}">` 
+                : `<i class="fa-solid fa-box-open"></i>`;
+
+            card.innerHTML = `
+                <div class="image-placeholder">${imageContent}</div>
+                <div class="card-content">
+                    <h3 class="product-title">${p.name}</h3>
+                    <div class="product-price">AED ${p.price.toFixed(2)}</div>
+                    <p class="product-desc">${p.desc}</p>
+                    <button class="btn-view">
+                        <i class="fa-solid fa-eye"></i> View Details
+                    </button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // Explicit Filter Function
+    function filterProducts(cat) {
+        renderProducts(cat);
+    }
+
+    // --- PRODUCT DETAIL FUNCTIONS ---
+    function openProductDetail(id) {
+        const product = products.find(p => p.id === id);
+        if(!product) return;
+
+        document.getElementById('detailTitle').innerText = product.name;
+        document.getElementById('detailPrice').innerText = `AED ${product.price.toFixed(2)}`;
+        document.getElementById('detailDesc').innerText = product.longDesc || product.desc; 
+        
+        const imageContainer = document.getElementById('detailImage');
+        imageContainer.innerHTML = product.imgSrc 
+            ? `<img src="${product.imgSrc}" alt="${product.name}">` 
+            : `<i class="fa-solid fa-box-open"></i>`;
+
+        const addBtn = document.getElementById('detailAddBtn');
+        addBtn.onclick = function() {
+            addToCart(product.id);
+            closeProductDetail();
+        };
+
+        productModalOverlay.classList.add('open');
+    }
+
+    function closeProductDetail() {
+        productModalOverlay.classList.remove('open');
+    }
+
+    // --- CART FUNCTIONS ---
+    function addToCart(id) {
+        const product = products.find(p => p.id === id);
+        const existingItem = cart.find(item => item.id === id);
+        if (existingItem) {
+            existingItem.qty += 1;
+        } else {
+            cart.push({ ...product, qty: 1 });
+        }
+        updateCartUI();
+        showToast();
+    }
+
+    function updateCartItemQty(id, change) {
+        const item = cart.find(item => item.id === id);
+        if (!item) return;
+
+        item.qty += change;
+
+        if (item.qty <= 0) {
+            removeFromCart(id);
+        } else {
+            updateCartUI();
+            renderCartList();
+        }
+    }
+
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
+        updateCartUI();
+        renderCartList();
+    }
+
+    function updateCartUI() {
+        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+        headerBadge.innerText = totalItems;
+        fabCount.innerText = totalItems;
+        if (totalItems > 0) {
+            headerBadge.classList.add('active');
+            fabCount.style.display = 'flex';
+        } else {
+            headerBadge.classList.remove('active');
+            fabCount.style.display = 'none';
+        }
+    }
+
+    function openCart() {
+        renderCartList();
+        cartModalOverlay.classList.add('open');
+    }
+
+    function closeCart() {
+        cartModalOverlay.classList.remove('open');
+    }
+
+    function renderCartList() {
+        if (cart.length === 0) {
+            cartList.innerHTML = '<div style="text-align:center; color:#999; padding:20px;">Your cart is empty.</div>';
+            cartTotalSection.style.display = 'none';
+            return;
+        }
+
+        let total = 0;
+
+        cartList.innerHTML = cart.map(item => {
+            const itemTotal = item.price * item.qty;
+            total += itemTotal;
+            return `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <span style="font-weight:600;">${item.name}</span>
+                    <span class="cart-item-price">AED ${item.price.toFixed(2)} x ${item.qty} = AED ${itemTotal.toFixed(2)}</span>
+                </div>
+                <div class="cart-controls">
+                    <button class="qty-btn" onclick="updateCartItemQty(${item.id}, -1)">-</button>
+                    <span class="cart-qty">${item.qty}</span>
+                    <button class="qty-btn" onclick="updateCartItemQty(${item.id}, 1)">+</button>
+                    <button class="btn-remove" onclick="removeFromCart(${item.id})"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        `}).join('');
+
+        cartTotalValue.innerText = `AED ${total.toFixed(2)}`;
+        cartTotalSection.style.display = 'flex';
+    }
+
+    function checkout() {
+        if (cart.length === 0) return alert("Cart is empty!");
+        
+        let total = 0;
+        const subject = encodeURIComponent("New Order Inquiry: Shaheen TLS");
+        let bodyText = "Hello,\n\nI would like to place an order for the following items:\n\n";
+        
+        cart.forEach(item => {
+            const itemTotal = item.price * item.qty;
+            total += itemTotal;
+            bodyText += `- ${item.name}\n  Quantity: ${item.qty}\n  Price: AED ${item.price} each\n  Subtotal: AED ${itemTotal}\n\n`;
+        });
+        
+        bodyText += `--------------------------\nTOTAL ESTIMATED VALUE: AED ${total.toFixed(2)}\n--------------------------\n\n`;
+        bodyText += "Please send me the official invoice and delivery details.\n\nThank you.";
+        
+        window.location.href = `mailto:${TARGET_EMAIL}?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+        closeCart();
+    }
+
+    function showToast() {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+    
+    // Close modals on background click
+    window.onclick = function(e) { 
+        if(e.target == cartModalOverlay) closeCart(); 
+        if(e.target == productModalOverlay) closeProductDetail();
+    }
+</script>
+
+</body>
+</html>

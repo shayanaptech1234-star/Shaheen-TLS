@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaheen TLS - Professional Tile Leveling Systems</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Brand Colors */
+            --primary: #0066cc;
+            --primary-dark: #004c99;
+            --primary-light: #e6f2ff;
+            --accent: #00b4d8; 
+            
+            /* Neutrals */
+            --bg-white: #ffffff;
+            --bg-off-white: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+
+            /* Effects */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        /* --- Reset & Base --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background: var(--bg-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s ease; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* --- Components --- */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        /* --- Glassy Header --- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            /* Glassmorphism Effect */
+            background: rgba(255, 255, 255, 0.7); /* High transparency */
+            backdrop-filter: blur(16px); /* Strong frost effect */
+            -webkit-backdrop-filter: blur(16px); /* Safari support */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03); /* Soft shadow */
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo svg { height: 40px; width: auto; }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            position: relative;
+        }
+           /* Logo Styling */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+        .logo-img {
+            max-height: 60px; /* Adjusts height automatically */
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .hamburger { display: none; cursor: pointer; font-size: 1.5rem; }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 8rem 0 6rem;
+            background: radial-gradient(circle at top right, #eef7ff 0%, #ffffff 60%);
+            position: relative;
+            overflow: hidden;
+            /* Adding negative margin so hero content goes behind glassy header slightly if needed, but padding handles it */
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.75rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .hero-content h1 span { color: var(--primary); }
+        
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 90%;
+        }
+
+        .hero-visual img {
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-hover);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .hero-visual:hover img {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        /* --- Stats/Trust Strip --- */
+        .trust-strip {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 2rem 0;
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .trust-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trust-item strong {
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .trust-item span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Featured Product (Safety Hooks) --- */
+        .featured {
+            padding: 6rem 0;
+            background: var(--bg-white);
+        }
+
+        .product-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            background: var(--bg-off-white);
+            padding: 4rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* --- Product Grid (Leveling System) --- */
+        .products {
+            padding: 6rem 0;
+            background: var(--bg-off-white);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .product-icon {
+            height: 120px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-off-white);
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+        }
+
+        .product-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .product-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Contact/CTA --- */
+        .contact {
+            padding: 6rem 0;
+            background: var(--bg-white);
+        }
+
+        .contact-wrapper {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--radius-lg);
+            padding: 4rem;
+            color: white;
+            text-align: center;
+            display: grid;
+            place-items: center;
+        }
+
+        .contact-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-content p {
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary);
+            padding: 1rem 3rem;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .btn-white:hover {
+            background: var(--bg-off-white);
+            transform: scale(1.05);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 5rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-col ul li { margin-bottom: 0.75rem; }
+        .footer-col ul li a:hover { color: white; }
+
+        .footer-bottom {
+            border-top: 1px solid #1e293b;
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 968px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-grid, .product-split, .footer-grid { grid-template-columns: 1fr; gap: 3rem; }
+            
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95); /* Slightly glassy mobile menu */
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: var(--shadow-card);
+                clip-path: circle(0% at 100% 0);
+                transition: 0.5s ease-in-out;
+                border-bottom: 1px solid var(--border-light);
+            }
+
+            .nav-links.active {
+                clip-path: circle(150% at 100% 0);
+            }
+
+            .hamburger { display: block; color: var(--text-main); }
+            .product-split { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <nav>
+                 <a href="index.html" class="logo-container">
+        <img src="WhatsApp Image 2025-12-23 at 11.14.36 PM.jpeg" alt="Shaheen TLS" class="logo-img">
+    </a>
+                <div class="hamburger" onclick="toggleMenu()">☰</div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="product.html">Leveling System</a></li>
+                    <li><a href="#contact" class="btn btn-primary" style="color: white;">Get Quote</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content" data-aos="fade-right">
+                    <h1>Precision Tiling.<br><span>Maximum Safety.</span></h1>
+                    <p>The UAE's trusted partner for high-rise facade mechanics and professional floor leveling systems. Certified SS 304 Safety Hooks and precision clips.</p>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="product.html" class="btn btn-primary">Explore Products</a>
+                        <a href="contact.html" class="btn btn-outline">Contact Sales</a>
+                    </div>
+                </div>
+                <div class="hero-visual" data-aos="fade-left">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 500'%3E%3Crect width='600' height='500' fill='%23f1f5f9' rx='20'/%3E%3Crect x='50' y='50' width='240' height='240' fill='%23e2e8f0' rx='4'/%3E%3Crect x='310' y='50' width='240' height='240' fill='%23e2e8f0' rx='4'/%3E%3Crect x='50' y='310' width='240' height='140' fill='%23e2e8f0' rx='4'/%3E%3Crect x='310' y='310' width='240' height='140' fill='%230066cc' opacity='0.1' rx='4'/%3E%3Cpath d='M290 170 L310 170' stroke='%230066cc' stroke-width='4'/%3E%3Cpath d='M170 290 L170 310' stroke='%230066cc' stroke-width='4'/%3E%3Ccircle cx='300' cy='300' r='40' fill='white' stroke='%230066cc' stroke-width='3'/%3E%3Cpath d='M285 300L295 310L315 290' stroke='%230066cc' stroke-width='3' fill='none'/%3E%3C/svg%3E" alt="Tiling System Diagram">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trust-strip">
+        <div class="container">
+            <div class="trust-grid">
+                <div class="trust-item" data-aos="fade-up" data-aos-delay="0">
+                    <div style="font-size: 1.5rem;">🛡️</div>
+                    <strong>SS 304 Steel</strong>
+                    <span>Corrosion Resistant</span>
+                </div>
+                <div class="trust-item" data-aos="fade-up" data-aos-delay="100">
+                    <div style="font-size: 1.5rem;">🏗️</div>
+                    <strong>High Rise Ready</strong>
+                    <span>Facade Certified</span>
+                </div>
+                <div class="trust-item" data-aos="fade-up" data-aos-delay="200">
+                    <div style="font-size: 1.5rem;">✨</div>
+                    <strong>Zero Lippage</strong>
+                    <span>Perfect Alignment</span>
+                </div>
+                <div class="trust-item" data-aos="fade-up" data-aos-delay="300">
+                    <div style="font-size: 1.5rem;">🚚</div>
+                    <strong>Fast Delivery</strong>
+                    <span>Across UAE</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured" id="hooks">
+        <div class="container">
+            <div class="section-title">
+                <span class="badge">Safety Essentials</span>
+                <h2>Tile Safety Hooks</h2>
+                <p>Prevent accidents and ensure structural integrity with our premium mechanical fixing hooks.</p>
+            </div>
+            
+            <div class="product-split">
+                <div class="product-img" data-aos="zoom-in">
+                    <img src="1.webp" alt="Safety Hook Technical">
+                </div>
+                <div class="product-info" data-aos="fade-left">
+                    <h3>Engineered for Protection</h3>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+                        Our hooks provide a secondary mechanical fixing for tiles on high-rise buildings, preventing falls due to adhesive failure.
+                    </p>
+                    <ul class="feature-list">
+                        <li><strong>Material:</strong> Premium Grade SS 304 Stainless Steel</li>
+                        <li><strong>Thickness:</strong> 0.6mm - 1.0mm options available</li>
+                        <li><strong>Application:</strong> Wet cladding & mechanical fixing</li>
+                        <li><strong>Compliance:</strong> Meets UAE safety regulations for facades</li>
+                        <li><strong>Durability:</strong> Rust-proof and weather resistant</li>
+                    </ul>
+                    <a href="product.html" class="btn btn-primary" style="margin-top: 1.5rem;">Buy Now!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products" id="products">
+        <div class="container">
+            <div class="section-title">
+                <span class="badge">Leveling System</span>
+                <h2>Complete Tiling Solutions</h2>
+                <p>Achieve a perfectly flat surface with our professional leveling components.</p>
+            </div>
+
+            <div class="product-grid">
+                <div class="product-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="product-icon">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <path d="M30 10V50M10 30H50" stroke="#0066cc" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="20" y="20" width="20" height="20" stroke="#0066cc" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>Leveling Clips</h3>
+                    <p>Disposable clips available in 1mm, 1.5mm, 2mm, and 3mm sizes for precise spacing.</p>
+                    <span style="color: var(--primary); font-weight: 600;">View Specs →</span>
+                </div>
+
+                <div class="product-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="product-icon">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <path d="M10 40L50 10L50 40H10Z" fill="#e6f2ff" stroke="#0066cc" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <h3>Reusable Wedges</h3>
+                    <p>Durable plastic wedges designed to hold the tile at an even height. Reusable for multiple jobs.</p>
+                    <span style="color: var(--primary); font-weight: 600;">View Specs →</span>
+                </div>
+
+                <div class="product-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="product-icon">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <path d="M15 45L45 15M45 45L15 15" stroke="#0066cc" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="30" cy="30" r="10" stroke="#0066cc" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>Tightening Pliers</h3>
+                    <p>Ergonomic metal pliers to push wedges into clips with adjustable tension.</p>
+                    <span style="color: var(--primary); font-weight: 600;">View Specs →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-wrapper" data-aos="zoom-in">
+                <div class="contact-content">
+                    <h2>Ready to Order?</h2>
+                    <p>Get a custom quote for your project. We offer bulk discounts for contractors and hardware suppliers.</p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                        <a href="mailto:sales@shaheentls.com" class="btn btn-white">Email Us</a>
+                        <a href="tel:+971500000000" class="btn" style="border: 2px solid white; color: white;">Call Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="color: white; margin-bottom: 1rem;">SHAHEEN TLS</div>
+                    <p style="max-width: 300px; line-height: 1.8; opacity: 0.8;">
+                        Leading provider of tiling safety hooks and leveling systems in the UAE. Committed to construction safety and quality finishing.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Products</h4>
+                    <ul>
+                        <li><a href="#">Safety Hooks</a></li>
+                        <li><a href="#">Leveling Clips</a></li>
+                        <li><a href="#">Wedges</a></li>
+                        <li><a href="#">Pliers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>Dubai, UAE</li>
+                        <li>sales@shaheentls.com</li>
+                        <li>+971 50 123 4567</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Shaheen TLS. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize Animations
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const nav = document.querySelector('.nav-links');
+            nav.classList.toggle('active');
+        }
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-links').classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
